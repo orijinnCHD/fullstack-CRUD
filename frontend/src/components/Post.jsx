@@ -1,14 +1,17 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import DeletePost from './DeletePost';
 import LikePost from './LikePost';
 
-const Post = ({post,userId}) => {
+const Post = ({post}) => {
     //console.log(post,"user : '' " + userId);
 
     const[isAuthor,setIsAuthor] = useState(false);
     const[isEdit,setIsEdit] = useState(false);
     const [newMessage,setNewMessage] = useState("");
+    const userId = useSelector((state)=>state.user.userId);
+
 
     useEffect(()=>{
         // savoir si l'auteur du post est le user actuelle
@@ -59,7 +62,7 @@ const Post = ({post,userId}) => {
                     (<p>{newMessage ? newMessage : post.message}</p>)
             }
             <div className="icons-part">
-                <LikePost post={post} userId={userId}/>
+                <LikePost post={post}/>
                 {/* proposer le menu editeur au user du message */}
                 {isAuthor && (
                     <div className="update-delete-icons">
