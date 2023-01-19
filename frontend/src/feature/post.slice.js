@@ -24,11 +24,57 @@ export const postSlice = createSlice({
 
         createPost:(state,{payload})=>{
             state.postsData.push(payload)
+        },
+
+        editPost:(state,{payload})=>{
+            state.postsData = state.postsData.map((post)=>{
+                // payload sera 2 element : donc 2 parametres
+                // playload[0]: message du post à changer
+                // playload[1]:id du post
+                if(post._id === payload[1]){
+                    return {
+                        // retourne tout le post (on destructure pour retrouver message) mais quand tu trouves message
+                        //tu vas remplacer avec le message en parametre 
+                        ...post,
+                        message:payload[0],
+                    }
+                }else{
+                    return post;
+                }
+            })
+        },
+        deletePost:(state,{payload})=>{
+            // on renvoie que les elements qui n'a pas le id à supprimé
+            state.postsData = state.postsData.filter((post)=>post._id !== payload)
+        },
+
+        like:(state,{payload})=>{
+            state.postsData = state.postsData.map((post)=>{
+                if(post._id === payload[1])
+                    return{
+                        ...post,
+                        likers:[...post.likers,payload[0]],
+                    }
+                else
+                    return post;
+            });
+        },
+
+        dislike:(state,{payload})=>{
+            state.postsData = state.postsData.map((post)=>{
+                if(post._id === payload[1])
+                    return{
+                        ...post,
+                        likers:post.likers.filter((userId =>userId !== payload[0])),
+                    }
+                else
+                    return post;
+            });
         }
 
         
     }
 });
 
-export const {getPostsSuccess,createPost} = postSlice.actions;
+export const {getPostsSuccess,createPost,editPost,deletePost,like,dislike} = postSlice.actions;
 export default postSlice.reducer;

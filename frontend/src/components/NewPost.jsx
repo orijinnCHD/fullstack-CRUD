@@ -14,13 +14,18 @@ const NewPost = () => {
         const data ={
             message,
             author:userId,
+            // créer un ID provisoire en attendant le retour de la bdd
+            id:Date.now(),
         }
 
-        axios.post('http://localhost:5000/post/',data).then(()=>{
-            dispatch(createPost(data));
-            //GetPosts car il faut aller chercher l'id crée par mongoDB
-            dispatch(getPosts());
-        });
+        axios.post('http://localhost:5000/post/',data)
+        dispatch(createPost(data));
+        //GetPosts car il faut aller chercher l'id crée par mongoDB
+        // mais le temps de recharger les données avec le getPosts,
+        // affichage return na pas le id du post ainsi la key du post est fait avec id db
+        // message erreur dans la console pendant un bref instant
+        // on a créer un id provisoire dans la data (pour eviter les erreurs de la console)
+        dispatch(getPosts());
         setMessage("");
     }
 
